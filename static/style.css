@@ -14,13 +14,19 @@
   --input-bg-light: #f0f2f5;
   --accent-color: #a3e583;
 
-  --bg-dark: #252e48;
-  --card-bg-dark: #2d37a;
-  --text-dark: #c7cedb;
-  --header-bg-dark: #2048a6;
-  --user-msg-bg-dark: #4a90e2;
-  --bot-msg-bg-dark: #3a456c;
-  --input-bg-dark: #252e48;
+  --bg-dark: #1c2230;
+  --card-bg-dark: #2a3144;
+  --text-dark: #e2e6f0;
+  --header-bg-dark: #22376f;
+  --user-msg-bg-dark: #3d6bba;
+  --bot-msg-bg-dark: #353f57;
+  --input-bg-dark: #202634;
+}
+
+body.dark-mode .chat-card {
+  background: var(--card-bg-dark);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.6), 0 0 15px rgba(50, 100, 200, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 body {
@@ -268,7 +274,6 @@ body.dark-mode .chat-header {
   height: 100%;
   object-fit: cover;
 }
-
 
 .profile-text {
   display: flex;
@@ -571,7 +576,6 @@ body.dark-mode .send-btn:hover {
   transform: scale(1) rotate(360deg);
 }
 
-
 @media (max-width: 1080px) {
   .chat-card {
     width: 100vw;
@@ -597,7 +601,8 @@ body.dark-mode .send-btn:hover {
     height: 40px;
   }
 
-  .header-btn, .Btn {
+  .header-btn,
+  .Btn {
     width: 40px;
     height: 40px;
   }
@@ -620,7 +625,6 @@ body.dark-mode .send-btn:hover {
     font-size: 15px;
   }
 }
-
 
 @media (max-width: 600px) {
   body {
@@ -654,7 +658,8 @@ body.dark-mode .send-btn:hover {
     height: 38px;
   }
 
-  .header-btn, .Btn {
+  .header-btn,
+  .Btn {
     width: 40px;
     height: 40px;
   }
@@ -682,19 +687,18 @@ body.dark-mode .send-btn:hover {
     overflow-y: auto;
   }
 
-  .upload-btn, .send-btn {
+  .upload-btn,
+  .send-btn {
     width: 42px;
     height: 42px;
     font-size: 22px;
   }
 }
 
-/* Fine-tuning for phones */
 @media (max-width: 600px) {
-  /* Profile section */
   .profile-pic {
-    width: 45px;   /* same as PC */
-    height: 45px;  /* keep round shape */
+    width: 45px;
+    height: 45px;
   }
 
   .profile-pic img {
@@ -703,7 +707,6 @@ body.dark-mode .send-btn:hover {
     object-fit: cover;
   }
 
-  /* Input area */
   .chat-input-area {
     padding: 10px 14px;
   }
@@ -712,14 +715,14 @@ body.dark-mode .send-btn:hover {
     font-size: 15px;
     padding: 10px 14px;
     border-radius: 20px;
-    height: 45px;            /* fixed height like PC */
+    height: 45px;
     line-height: 1.4;
-    max-height: 90px;        /* allow growth for multi-line */
-    overflow-y: auto;        /* scroll if too much text */
+    max-height: 90px;
+    overflow-y: auto;
   }
 
-  /* Buttons next to input */
-  .upload-btn, .send-btn {
+  .upload-btn,
+  .send-btn {
     width: 44px;
     height: 44px;
     font-size: 22px;

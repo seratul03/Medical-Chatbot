@@ -688,3 +688,40 @@ body.dark-mode .send-btn:hover {
     font-size: 22px;
   }
 }
+
+/* Fine-tuning for phones */
+@media (max-width: 600px) {
+  /* Profile section */
+  .profile-pic {
+    width: 45px;   /* same as PC */
+    height: 45px;  /* keep round shape */
+  }
+
+  .profile-pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Input area */
+  .chat-input-area {
+    padding: 10px 14px;
+  }
+
+  #user-input {
+    font-size: 15px;
+    padding: 10px 14px;
+    border-radius: 20px;
+    height: 45px;            /* fixed height like PC */
+    line-height: 1.4;
+    max-height: 90px;        /* allow growth for multi-line */
+    overflow-y: auto;        /* scroll if too much text */
+  }
+
+  /* Buttons next to input */
+  .upload-btn, .send-btn {
+    width: 44px;
+    height: 44px;
+    font-size: 22px;
+  }
+}

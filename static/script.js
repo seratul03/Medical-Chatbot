@@ -1,22 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
-
   const disclaimerModal = document.getElementById("disclaimer-modal");
   const disclaimerCheckbox = document.getElementById("cbx2");
   const continueBtn = document.getElementById("continue-btn");
-
-
-  disclaimerCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-      continueBtn.disabled = false;
-    } else {
-      continueBtn.disabled = true;
-    }
-  });
-
-  
-  continueBtn.addEventListener("click", function () {
-    disclaimerModal.style.display = "none";
-  });
 
   const body = document.body;
   const chatForm = document.getElementById("chat-form");
@@ -24,8 +9,24 @@ document.addEventListener("DOMContentLoaded", function () {
   const imageInput = document.getElementById("image-input");
   const chatBox = document.getElementById("chat-box");
   const refreshBtn = document.getElementById("refresh-btn");
-  const logoutBtn = document.querySelector(".Btn"); 
+  const logoutBtn = document.querySelector(".Btn");
   const themeToggle = document.getElementById("switch");
+  const exitModal = document.getElementById("exit-modal");
+  const exitYes = document.getElementById("exit-yes");
+  const exitNo = document.getElementById("exit-no");
+
+  let disclaimerVisible = true;
+
+ 
+  disclaimerCheckbox.addEventListener("change", function () {
+    continueBtn.disabled = !this.checked;
+  });
+
+  
+  continueBtn.addEventListener("click", function () {
+    disclaimerModal.style.display = "none";
+    disclaimerVisible = false;
+  });
 
   if (themeToggle) {
     const applyTheme = (theme) => {
@@ -55,6 +56,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let userMessage = userInput.value.trim();
     if (!userMessage && !imageInput.files[0]) return;
+
+    
+    if (disclaimerVisible) {
+      disclaimerModal.style.display = "none";
+      disclaimerVisible = false;
+    }
 
     if (userMessage) {
       let userDiv = document.createElement("div");
@@ -118,16 +125,24 @@ document.addEventListener("DOMContentLoaded", function () {
   refreshBtn.addEventListener("click", function () {
     chatBox.innerHTML = "";
     refreshBtn.classList.add("rotating");
+    disclaimerModal.style.display = "flex";
+    disclaimerVisible = true;
   });
 
   refreshBtn.addEventListener("animationend", function () {
     refreshBtn.classList.remove("rotating");
   });
 
-
   logoutBtn.addEventListener("click", function () {
-    disclaimerModal.style.display = "flex";
-    disclaimerCheckbox.checked = false;
-    continueBtn.disabled = true;
+    exitModal.style.display = "flex";
+  });
+
+  exitYes.addEventListener("click", function () {
+    window.close();
+    exitModal.style.display = "none";
+  });
+
+  exitNo.addEventListener("click", function () {
+    exitModal.style.display = "none";
   });
 });

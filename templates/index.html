@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
     <title>Health Mate</title>
     <link rel="stylesheet" href="/static/style.css" />
     <link
@@ -114,6 +117,8 @@
           </div>
         </div>
         <div id="chat-box" class="chat-box"></div>
+        
+
         <form
           id="chat-form"
           enctype="multipart/form-data"
@@ -132,6 +137,15 @@
             <span class="material-symbols-outlined">send</span>
           </button>
         </form>
+      </div>
+    </div>
+    <div id="exit-modal" class="exit-modal">
+      <div class="exit-content">
+        <h3>Do you really want to exit?</h3>
+        <div class="exit-actions">
+          <button id="exit-yes" class="exit-btn yes">Yes</button>
+          <button id="exit-no" class="exit-btn no">No</button>
+        </div>
       </div>
     </div>
     <script src="/static/script.js"></script>

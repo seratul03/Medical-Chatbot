@@ -25,6 +25,7 @@ def chat():
             "Do not repeat disclaimers in every message. "
             "Provide safe, general, and well-explained advice. "
             "Format responses in Markdown for readability. "
+            "Always provide some special, take care or other health wishing notes. "
             "If asked about a disease, explain it clearly and always include some prevention tips.\n\n"
             f"**User's Query:** {user_text}"
         )

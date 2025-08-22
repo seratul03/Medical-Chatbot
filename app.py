@@ -16,21 +16,19 @@ def chat():
     user_text = request.form.get("message")
     image_file = request.files.get("image")
 
-    
     model = "gemini-1.5-flash-latest"
-    
-    parts = [{
-    "text": (
-        "You are a friendly and professional medical assistant AI named Health Mate. "
-        "Your persona is caring, empathetic, and knowledgeable. "
-        "Do not repeat disclaimers in every message. "
-        "Provide safe, general, and well-explained advice. "
-        "Format responses in Markdown for readability. "
-        "If asked about a disease, explain it clearly and always include some prevention tips.\n\n"
-        f"**User's Query:** {user_text}"
-    )
-}]
 
+    parts = [{
+        "text": (
+            "You are a friendly and professional medical assistant AI named Health Mate. "
+            "Your persona is caring, empathetic, and knowledgeable. "
+            "Do not repeat disclaimers in every message. "
+            "Provide safe, general, and well-explained advice. "
+            "Format responses in Markdown for readability. "
+            "If asked about a disease, explain it clearly and always include some prevention tips.\n\n"
+            f"**User's Query:** {user_text}"
+        )
+    }]
 
     if image_file:
         img_bytes = image_file.read()
@@ -47,12 +45,16 @@ def chat():
         url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={API_KEY}"
         headers = {"Content-Type": "application/json"}
         payload = {"contents": [{"parts": parts}]}
-        
+
         resp = requests.post(url, headers=headers, json=payload, timeout=120)
+        
+        # This will print the full response from the API to your console
+        print(resp.json()) 
+        
         resp.raise_for_status()
-        
+
         data = resp.json()
-        
+
         bot_reply = (
             data.get("candidates", [{}])[0]
             .get("content", {})

@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const chatForm = document.getElementById("chat-form");
   const userInput = document.getElementById("user-input");
   const imageInput = document.getElementById("image-input");
+  const imagePreview = document.getElementById("image-preview");
   const chatBox = document.getElementById("chat-box");
   const refreshBtn = document.getElementById("refresh-btn");
   const logoutBtn = document.querySelector(".Btn");
@@ -17,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let disclaimerVisible = true;
 
- 
+  
   disclaimerCheckbox.addEventListener("change", function () {
     continueBtn.disabled = !this.checked;
   });
@@ -28,6 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
     disclaimerVisible = false;
   });
 
+  
   if (themeToggle) {
     const applyTheme = (theme) => {
       if (theme === "dark") {
@@ -51,13 +53,34 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  
+  imageInput.addEventListener("change", function () {
+    imagePreview.innerHTML = "";
+    if (this.files && this.files[0]) {
+      const img = document.createElement("img");
+      img.src = URL.createObjectURL(this.files[0]);
+
+      const removeBtn = document.createElement("div");
+      removeBtn.className = "remove-btn";
+      removeBtn.innerHTML = "&times;";
+
+      removeBtn.addEventListener("click", () => {
+        imageInput.value = "";
+        imagePreview.innerHTML = "";
+      });
+
+      imagePreview.appendChild(img);
+      imagePreview.appendChild(removeBtn);
+    }
+  });
+
+  
   chatForm.addEventListener("submit", async function (e) {
     e.preventDefault();
 
     let userMessage = userInput.value.trim();
     if (!userMessage && !imageInput.files[0]) return;
 
-    
     if (disclaimerVisible) {
       disclaimerModal.style.display = "none";
       disclaimerVisible = false;
@@ -87,6 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     userInput.value = "";
     imageInput.value = "";
+    imagePreview.innerHTML = ""; 
     userInput.style.height = "auto";
 
     let botDiv = document.createElement("div");
@@ -110,11 +134,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  userInput.addEventListener("input", function () {
-    this.style.height = "auto";
-    this.style.height = this.scrollHeight + "px";
-  });
-
+  
   userInput.addEventListener("keydown", function (e) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -122,6 +142,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  
   refreshBtn.addEventListener("click", function () {
     chatBox.innerHTML = "";
     refreshBtn.classList.add("rotating");
@@ -132,6 +153,7 @@ document.addEventListener("DOMContentLoaded", function () {
   refreshBtn.addEventListener("animationend", function () {
     refreshBtn.classList.remove("rotating");
   });
+
 
   logoutBtn.addEventListener("click", function () {
     exitModal.style.display = "flex";

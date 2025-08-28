@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const disclaimerModal = document.getElementById("disclaimer-modal");
   const disclaimerCheckbox = document.getElementById("cbx2");
   const continueBtn = document.getElementById("continue-btn");
-
+  
   const body = document.body;
   const chatForm = document.getElementById("chat-form");
   const userInput = document.getElementById("user-input");
@@ -18,18 +18,49 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let disclaimerVisible = true;
 
-  
+  // === NEW: TYPEWRITER FUNCTION ===
+  async function typeWriter(element, htmlString, speed = 10) {
+    element.innerHTML = ""; // Clear the element first
+    element.classList.add("is-typing"); // Add class for blinking cursor effect
+
+    let i = 0;
+    const scrollInterval = setInterval(() => {
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }, 50);
+
+    // This loop reveals the text character by character, but adds HTML tags instantly
+    while (i < htmlString.length) {
+      const char = htmlString[i];
+      if (char === "<") {
+        const closingTagIndex = htmlString.indexOf(">", i);
+        if (closingTagIndex !== -1) {
+          element.innerHTML += htmlString.substring(i, closingTagIndex + 1);
+          i = closingTagIndex;
+        }
+      } else {
+        element.innerHTML += char;
+        await new Promise((resolve) => setTimeout(resolve, speed));
+      }
+      i++;
+    }
+
+    clearInterval(scrollInterval);
+    chatBox.scrollTop = chatBox.scrollHeight;
+    element.classList.remove("is-typing"); // Typing is done, remove cursor
+  }
+  // === END OF NEW FUNCTION ===
+
   disclaimerCheckbox.addEventListener("change", function () {
     continueBtn.disabled = !this.checked;
   });
 
-  
+
   continueBtn.addEventListener("click", function () {
     disclaimerModal.style.display = "none";
     disclaimerVisible = false;
   });
 
-  
+
   if (themeToggle) {
     const applyTheme = (theme) => {
       if (theme === "dark") {
@@ -53,17 +84,17 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  
+
   imageInput.addEventListener("change", function () {
     imagePreview.innerHTML = "";
     if (this.files && this.files[0]) {
       const img = document.createElement("img");
       img.src = URL.createObjectURL(this.files[0]);
-
+      
       const removeBtn = document.createElement("div");
       removeBtn.className = "remove-btn";
       removeBtn.innerHTML = "&times;";
-
+      
       removeBtn.addEventListener("click", () => {
         imageInput.value = "";
         imagePreview.innerHTML = "";
@@ -74,7 +105,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  
   chatForm.addEventListener("submit", async function (e) {
     e.preventDefault();
 
@@ -92,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
       userDiv.innerText = userMessage;
       chatBox.appendChild(userDiv);
     }
-
+  
     if (imageInput.files[0]) {
       let imageDiv = document.createElement("div");
       imageDiv.className = "message user";
@@ -110,22 +140,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
     userInput.value = "";
     imageInput.value = "";
-    imagePreview.innerHTML = ""; 
+    imagePreview.innerHTML = "";
     userInput.style.height = "auto";
 
     let botDiv = document.createElement("div");
     botDiv.className = "message bot";
-    let typingIndicator = document.createElement("div");
-    typingIndicator.className = "typing-indicator";
-    typingIndicator.innerHTML = "<span></span><span></span><span></span>";
-    botDiv.appendChild(typingIndicator);
+  
     chatBox.appendChild(botDiv);
     chatBox.scrollTop = chatBox.scrollHeight;
 
     try {
       const response = await fetch("/chat", { method: "POST", body: formData });
       const data = await response.json();
-      botDiv.innerHTML = data.reply;
+      await typeWriter(botDiv, data.reply);
     } catch (error) {
       botDiv.innerHTML =
         "<p><strong>Error:</strong> Failed to get a response from the server. Please try again.</p>";
@@ -134,18 +161,20 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  
   userInput.addEventListener("keydown", function (e) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       chatForm.requestSubmit();
     }
   });
-
-  
-  refreshBtn.addEventListener("click", function () {
+  refreshBtn.addEventListener("click", async function () {
     chatBox.innerHTML = "";
     refreshBtn.classList.add("rotating");
+    try {
+      await fetch("/clear", { method: "POST" });
+    } catch (error) {
+      console.error("Failed to clear chat session on server:", error);
+    }
     disclaimerModal.style.display = "flex";
     disclaimerVisible = true;
   });
